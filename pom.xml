@@ -11,6 +11,9 @@
 	<properties>
 		<amqp-client.version>5.7.3</amqp-client.version>
 		<slf4j-api.version>1.7.28</slf4j-api.version>
+
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
