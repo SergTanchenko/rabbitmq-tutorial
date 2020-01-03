@@ -22,8 +22,9 @@ public class Worker {
 
 		Connection connection = connectionFactory.newConnection();
 		Channel channel = connection.createChannel();
+		channel.basicQos(1);
 
-		channel.queueDeclare(TASK_QUEUE_NAME, false, false, false, null);
+		channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
 
 		DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 			String message = new String(delivery.getBody(), "UTF-8");
@@ -48,7 +49,7 @@ public class Worker {
 	private static void doWork(String task) throws InterruptedException {
 		for (char ch : task.toCharArray()) {
 			if (ch == '.') {
-				LOGGER.info(" [x] Working...");
+				LOGGER.info(" [x] Task: '{}'. Working... ", task);
 				Thread.sleep(5000);
 			}
 		}

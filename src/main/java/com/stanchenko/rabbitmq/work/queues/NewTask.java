@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 
 public class NewTask {
 
@@ -19,13 +20,13 @@ public class NewTask {
 		ConnectionFactory connectionFactory = new ConnectionFactory();
 		connectionFactory.setHost("localhost");
 
-		String message = "Message....";
+		String message = "Message saved....";
 		try (Connection connection = connectionFactory.newConnection();
 				Channel channel = connection.createChannel()) {
 
-			channel.queueDeclare(TASK_QUEUE_NAME, false, false, false, null);
+			channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
 
-			channel.basicPublish("", TASK_QUEUE_NAME, null, message.getBytes());
+			channel.basicPublish("", TASK_QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
 			LOGGER.info("[x] Sent '{}'", message);
 		}
 	}
