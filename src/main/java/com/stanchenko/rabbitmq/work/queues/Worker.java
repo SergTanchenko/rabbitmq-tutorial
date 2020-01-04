@@ -1,6 +1,7 @@
 package com.stanchenko.rabbitmq.work.queues;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class Worker {
 		channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
 
 		DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-			String message = new String(delivery.getBody(), "UTF-8");
+			String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 			LOGGER.info(" [x] Received: '{}'", message);
 			try {
 				doWork(message);
@@ -50,7 +51,7 @@ public class Worker {
 		for (char ch : task.toCharArray()) {
 			if (ch == '.') {
 				LOGGER.info(" [x] Task: '{}'. Working... ", task);
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 			}
 		}
 	}
